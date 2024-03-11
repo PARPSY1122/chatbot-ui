@@ -1,7 +1,24 @@
 terraform {
-  backend "s3" {
-    bucket = "ajay-mrcloudbook777" # Replace with your actual S3 bucket name
-    key    = "EKS/terraform.tfstate"
-    region = "ap-south-1"
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>3.0"
+    }
   }
+  backend "azurerm" {
+      resource_group_name  = "myrg"
+      storage_account_name = "backend"
+      container_name       = "tfstate"
+      key                  = "terraform.tfstate"
+  }
+
+}
+
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "myrg" {
+  name     = "myrg"
+  location = "eastus"
 }
